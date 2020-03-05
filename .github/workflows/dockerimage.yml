@@ -1,0 +1,33 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:    
+    - uses: Azure/docker-login@v1
+      
+    - name: Docker Login
+      uses: Azure/docker-login@v1
+      with:
+        # Container registry username
+        username: ${{ secrets.DOCKER_USERNAME }} 
+        # Container registry password
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        # Container registry server url
+        login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
+    
+    
+    - name: Build e Push no Azure Container Registry
+      run: |
+        docker build . --file Dockerfile --tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest
+        docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
+        docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
