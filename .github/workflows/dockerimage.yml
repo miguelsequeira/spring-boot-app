@@ -21,5 +21,5 @@ jobs:
 #        password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Build e Push no Azure Container Registry
-      run: docker build -f ../master/Dockerfile --tag springdemo.azurecr.io/spring-boot-app:latest .
+      run: docker build --tag springdemo.azurecr.io/spring-boot-app:latest .
 
