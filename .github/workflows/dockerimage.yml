@@ -20,9 +20,3 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }} 
         password: ${{ secrets.DOCKER_PASSWORD }}
     
-    
-    - name: Build e Push no Azure Container Registry
-      run: |
-        docker build . --file Dockerfile --tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest
-        docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
-        docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
