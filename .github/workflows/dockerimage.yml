@@ -34,6 +34,18 @@ jobs:
       run: |
         echo "$(ls ../../)"
     
+    - name: Xpto_3
+      id: Abc_3
+      run: |
+        echo "$(ls ../../_temp)"
+
+    
+    - name: Xpto_4
+      id: Abc_4
+      run: |
+        echo "$(ls ../../../)"
+    
+    
     - name: Build e Push no Azure Container Registry
       run: docker build --tag springdemo.azurecr.io/spring-boot-app:latest .
 
