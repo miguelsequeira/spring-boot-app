@@ -19,6 +19,8 @@ jobs:
 #        login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
 #        username: ${{ secrets.DOCKER_USERNAME }} 
 #        password: ${{ secrets.DOCKER_PASSWORD }}
+    - uses: actions/checkout@master
+      
     - name: Xpto
       id: Abc
       run: |
