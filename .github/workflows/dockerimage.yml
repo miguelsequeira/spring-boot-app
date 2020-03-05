@@ -19,27 +19,7 @@ jobs:
         login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
         username: ${{ secrets.DOCKER_USERNAME }} 
         password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Content list
-      uses: enricomarino/actions@v2
-      with:
-        # The folder to inspect
-        source: ./
-    
-    
-    - name: Content list
-      uses: enricomarino/actions@v2
-      with:
-        # The folder to inspect
-        source: ../
-        
-    
-    - name: Content list
-      uses: enricomarino/actions@v2
-      with:
-        # The folder to inspect
-        source: master/
     
     - name: Build e Push no Azure Container Registry
-      run: docker build -f ../../Dockerfile --tag springdemo.azurecr.io/spring-boot-app:latest .
+      run: docker build --tag springdemo.azurecr.io/spring-boot-app:latest .
 
