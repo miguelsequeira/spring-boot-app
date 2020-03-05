@@ -42,5 +42,5 @@ jobs:
     
     - name: Build e Push no Azure Container Registry
       run: |
-        docker build  -f ../master/bolb/Dockerfile.txt --tag springdemo.azurecr.io/spring-boot-app:latest .
+        docker build  -f ../blob/master/Dockerfile.txt --tag springdemo.azurecr.io/spring-boot-app:latest .
 
