@@ -21,33 +21,27 @@ jobs:
 #        password: ${{ secrets.DOCKER_PASSWORD }}
     - uses: actions/checkout@master
       
-    - name: Xpto
+    - name: ls
       id: Abc
       run: |
         echo "$(ls)"
         
-    - name: Xpto_1
+    - name: ls ../
       id: Abc_1
       run: |
         echo "$(ls ../)"
     
-    - name: Xpto_2
+    - name: ls ../../
       id: Abc_2
       run: |
         echo "$(ls ../../)"
-    
-    - name: Xpto_3
-      id: Abc_3
-      run: |
-        echo "$(ls ../../_temp)"
 
-    
-    - name: Xpto_4
+    - name: ls ../../../
       id: Abc_4
       run: |
         echo "$(ls ../../../)"
     
-    - name: Xpto_5
+    - name: ls ../../../../
       id: Abc_5
       run: |
         echo "$(ls ../../../../)"
