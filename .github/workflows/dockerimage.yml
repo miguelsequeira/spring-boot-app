@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:    
-    - name: Docker Login
+    - name: Azure Docker Login
       uses: Azure/docker-login@v1
       with:
         login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
@@ -22,13 +22,13 @@ jobs:
     
     - uses: actions/checkout@master
       
-    - name: ls -l
+    - name: bash> ls -l
       id: Abc
       run: |
         echo "$(ls -l)"
 
     
-    - name: Build e Push no Azure Container Registry
+    - name: Build & Push to Azure Container Registry
       run: |
         docker build . --file Dockerfile --tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest
         docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
