@@ -13,38 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:    
-#    - name: Docker Login
-#      uses: Azure/docker-login@v1
-#      with:
-#        login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
-#        username: ${{ secrets.DOCKER_USERNAME }} 
-#        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Docker Login
+      uses: Azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
+        username: ${{ secrets.DOCKER_USERNAME }} 
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
     - uses: actions/checkout@master
       
     - name: ls
       id: Abc
       run: |
         echo "$(ls)"
-        
-    - name: ls ../
-      id: Abc_1
-      run: |
-        echo "$(ls ../)"
-    
-    - name: ls ../../
-      id: Abc_2
-      run: |
-        echo "$(ls ../../)"
 
-    - name: ls ../../../
-      id: Abc_4
-      run: |
-        echo "$(ls ../../../)"
-    
-    - name: ls ../../../../
-      id: Abc_5
-      run: |
-        echo "$(ls ../../../../)"
     
     - name: Build e Push no Azure Container Registry
       run: docker build --tag springdemo.azurecr.io/spring-boot-app:latest .
