@@ -16,7 +16,7 @@ jobs:
 
     - uses: actions/checkout@master
     
-    - name: bash> ls -lQQ
+    - name: bash> ls -l
       id: Abc
       run: |
         echo "$(ls -l)"
