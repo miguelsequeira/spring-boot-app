@@ -9,5 +9,5 @@ spec:
   selector:
     k8s-app: spring-boot-app
   ports:
-    - port: 80
+    - port: 8080
       targetPort: 8080
