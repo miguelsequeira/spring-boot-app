@@ -37,8 +37,28 @@ jobs:
         docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
 
     # Set the target AKS cluster.
-    - uses: Azure/aks-set-context@v1
+    - name: Setup Azure Aks Context
+      uses: Azure/aks-set-context@v1
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: SpringCluster
         resource-group: ResourceGroup
+
+    - name: Create Azure Aks Secret
+      uses: Azure/k8s-create-secret@v1
+      with:
+        container-registry-url: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
+        container-registry-username: ${{ secrets.DOCKER_USERNAME }} 
+        container-registry-password: ${{ secrets.DOCKER_PASSWORD }}
+        secret-name: my-k8s-secret
+    
+    - name: Deploy on Azure Aks Cluster
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
+        imagepullsecrets: |
+          my-k8s-secret
