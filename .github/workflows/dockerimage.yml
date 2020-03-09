@@ -36,3 +36,9 @@ jobs:
         docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
         docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
 
+    # Set the target AKS cluster.
+    - uses: Azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: SpringCluster
+        resource-group: ResourceGroup
