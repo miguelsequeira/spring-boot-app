@@ -67,3 +67,4 @@ jobs:
           ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
         imagepullsecrets: |
           my-k8s-secret
+          
