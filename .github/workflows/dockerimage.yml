@@ -57,7 +57,6 @@ jobs:
       with:
         manifests: |
           manifests/deployment.yml
-          manifests/service.yml
         images: |
           ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
         imagepullsecrets: |
