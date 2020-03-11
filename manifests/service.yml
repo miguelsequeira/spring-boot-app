@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: test-service
+  labels:
+    k8s-app: spring-boot-app
 spec:
   type: LoadBalancer
   selector:
@@ -9,3 +11,5 @@ spec:
   ports:
     - port: 8080
       targetPort: 80
+      protocol: TCP
+      name: http
