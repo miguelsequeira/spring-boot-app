@@ -51,7 +51,13 @@ jobs:
         container-registry-username: ${{ secrets.DOCKER_USERNAME }} 
         container-registry-password: ${{ secrets.DOCKER_PASSWORD }}
         secret-name: my-k8s-secret
-    
+                   
+    - name: Deploy App Service on Azure Aks Cluster
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/service.yml
+          
     - name: Deploy App Cluster on Azure Aks Cluster
       uses: Azure/k8s-deploy@v1
       with:
@@ -61,9 +67,3 @@ jobs:
           ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
         imagepullsecrets: |
           my-k8s-secret
-                   
-    - name: Deploy App Service on Azure Aks Cluster
-      uses: Azure/k8s-deploy@v1
-      with:
-        manifests: |
-          manifests/service.yml
