@@ -33,7 +33,6 @@ jobs:
         docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
         docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
 
-    # Set the target AKS cluster.
     - name: Setup Azure Aks Context
       uses: Azure/aks-set-context@v1
       with:
@@ -49,7 +48,7 @@ jobs:
         container-registry-password: ${{ secrets.DOCKER_PASSWORD }}
         secret-name: my-k8s-secret
         
-    - name: Deploy App Cluster on Azure Aks Cluster
+    - name: Deploy App Cluster on Azure Kubernetes
       uses: Azure/k8s-deploy@v1
       with:
         manifests: |
@@ -59,9 +58,21 @@ jobs:
         imagepullsecrets: |
           my-k8s-secret
                    
-    - name: Deploy App Service on Azure Aks Cluster
+    - name: Deploy App Service on Azure Kubernetes
       uses: Azure/k8s-deploy@v1
       with:
         manifests: |
           manifests/app-service.yml
           
+    - name: Deploy Nginx Ingress Controller on Azure Kubernetes
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/nginx-ingress-controller.yml
+          manifests/nginx-mandatory.yml
+          
+    - name: Deploy Nginx Ingress Routes on Azure Kubernetes
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/nginx-ingress-routes.yml
