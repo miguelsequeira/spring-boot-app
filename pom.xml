@@ -51,6 +51,22 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+
+<!--		&lt;!&ndash; Azure monitor &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.microsoft.azure</groupId>-->
+<!--			<artifactId>applicationinsights-web-auto</artifactId>-->
+<!--			&lt;!&ndash; or applicationinsights-web for manual web filter registration &ndash;&gt;-->
+<!--			&lt;!&ndash; or applicationinsights-core for bare API &ndash;&gt;-->
+<!--			<version>2.5.0</version>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>applicationinsights-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
