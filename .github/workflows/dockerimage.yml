@@ -12,6 +12,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    name: build and publish
     steps:
 
     - uses: actions/checkout@master
@@ -75,7 +76,7 @@ jobs:
       uses: Azure/k8s-deploy@v1
       with:
         manifests: |
-          kong-dbless-mandatory.yml
+          manifests/kong-dbless-mandatory.yml
           manifests/kong-deployment.yml
         images: |
           ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong
