@@ -12,3 +12,20 @@ spec:
         backend:
           serviceName: test-service
           servicePort: 8080
+      - path: /kong8000
+        backend:
+          serviceName: kong-service
+          servicePort: 8000
+      - path: /kong8443
+        backend:
+          serviceName: kong-service
+          servicePort: 8443
+      - path: /kong8001
+        backend:
+          serviceName: kong-service
+          servicePort: 8001
+      - path: /kong8444
+        backend:
+          serviceName: kong-service
+          servicePort: 8444
+

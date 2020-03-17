@@ -11,16 +11,11 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
+    name: Build and deploy on ACR
     steps:
 
     - uses: actions/checkout@master
-    
-    - name: bash> ls -l
-      id: Abc
-      run: |
-        echo "$(ls -l)"
 
     - name: Azure Docker Login
       uses: Azure/docker-login@v1
@@ -28,12 +23,6 @@ jobs:
         login-server: ${{ secrets.DOCKER_CONTAINER_REGISTRY }}
         username: ${{ secrets.DOCKER_USERNAME }} 
         password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: Build & Push to Azure Container Registry
-      run: |
-        docker build . --file Dockerfile --tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest
-        docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
-        docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
 
     - name: Setup Azure Aks Context
       uses: Azure/aks-set-context@v1
@@ -50,7 +39,31 @@ jobs:
         container-registry-password: ${{ secrets.DOCKER_PASSWORD }}
         secret-name: my-k8s-secret
         
-    - name: Deploy App Cluster on Azure Kubernetes
+    # spring-boot-app
+    - name: Build & Push spring-boot-app image to Azure Container Registry
+      run: |
+        docker build . --file Dockerfile --tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest
+        docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app:$(date +%s)
+        docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/spring-boot-app
+        
+    # kong
+    - name: Build & Push kong image to Azure Container Registry
+      run: |
+        docker build . --file kong/Dockerfile --tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong:latest
+        docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong:$(date +%s)
+        docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong
+        
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    name: Deploy on AKS
+    steps:
+
+    - uses: actions/checkout@master
+ 
+    # spring-boot-app
+    - name: Deploy spring-boot-app Cluster on Azure Kubernetes
       uses: Azure/k8s-deploy@v1
       with:
         manifests: |
@@ -60,12 +73,31 @@ jobs:
         imagepullsecrets: |
           my-k8s-secret
                    
-    - name: Deploy App Service on Azure Kubernetes
+    - name: Deploy spring-boot-app Service on Azure Kubernetes
       uses: Azure/k8s-deploy@v1
       with:
         manifests: |
           manifests/app-service.yml
           
+    # kong
+    - name: Deploy kong Cluster on Azure Kubernetes
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          kong-dbless-mandatory.yml
+          manifests/kong-deployment.yml
+        images: |
+          ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong
+        imagepullsecrets: |
+          my-k8s-secret
+          
+    - name: Deploy kong Service on Azure Kubernetes
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/kong-service.yml
+          
+    # nginx-ingress-controller
     - name: Deploy Nginx Ingress Controller on Azure Kubernetes
       uses: Azure/k8s-deploy@v1
       with:
