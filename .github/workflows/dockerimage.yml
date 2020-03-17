@@ -72,11 +72,21 @@ jobs:
         docker tag ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong:latest ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong:$(date +%s)
         docker push ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong
           
+    - name: Deploy kong Core Proxy on Azure Kubernetes
+      uses: Azure/k8s-deploy@v1
+      with:
+        namespace: kong
+        manifests: |
+          manifests/kong-dbless-mandatory.yml
+        images: |
+          ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong
+        imagepullsecrets: |
+          my-k8s-secret
+          
     - name: Deploy kong Cluster on Azure Kubernetes
       uses: Azure/k8s-deploy@v1
       with:
         manifests: |
-          manifests/kong-dbless-mandatory.yml
           manifests/kong-deployment.yml
         images: |
           ${{ secrets.DOCKER_CONTAINER_REGISTRY }}/kong
